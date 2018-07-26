@@ -1,0 +1,78 @@
+*** Settings ***
+Resource          resource.txt
+
+*** Variables ***
+
+*** Test Cases ***
+TC02001_VerifyAssetPage
+    [Tags]    verifyAccessibility
+    AMS-Login
+    Asset-Go To Asset Page
+    Screenshot Entire Page
+    Close Browser
+    Log To Console    Able to open Asset page.
+
+TC02002_VerifyApprovalPage
+    [Tags]    verifyAccessibility
+    AMS-Login
+    Click Element    Xpath=.//*[@id='SidebarNav']/a[3]
+    Element Should Be Visible    Xpath=.//h2[contains(text(),'Approvals')]
+    Screenshot Entire Page
+    Close Browser
+    Log To Console    Able to open Approval Page
+
+TC02003_VerifyAssetRequestPage
+    [Tags]    verifyAccessibility
+    AMS-Login
+    Request-Go To AssetRequest Page
+    Screenshot Entire Page
+    Close Browser
+    Log To Console    Able to open Asset Request page
+
+TC02004_VerifyAssetTransferPage
+    [Tags]    verifyAccessibility
+    AMS-Login
+    Click Element    class=NavGroup
+    Go To    http://localhost:57065/assettransfer
+    Element Should Be Visible    Xpath=.//h2[contains(text(),'Asset Transfer')]
+    Screenshot Entire Page
+    Close Browser
+    Log To Console    Able to open Asset Transfer page
+
+TC02005_VerifySettingUserPage
+    [Tags]    verifyAccessibility
+    AMS-Login
+    Go To    http://localhost:57065/usermanagement
+    Element Should Be Visible    Xpath=.//h2[contains(text(),'User Management')]
+    Screenshot Entire Page
+    Close Browser
+    Log To Console    Able to open User Setting page
+
+TC02006_VerifySettingUserRolePage
+    [Tags]    verifyAccessibility
+    AMS-Login
+    Go To    http://localhost:57065/userrole
+    Element Should Be Visible    Xpath=.//h2[contains(text(),'User Role')]
+    Screenshot Entire Page
+    Close Browser
+    Log To Console    Able to open User Role Setting page
+
+TC02007_VerifySettingPermissionCodePage
+    [Tags]    verifyAccessibility
+    AMS-Login
+    Go To    http://localhost:57065/masterpermission
+    Element Should Be Visible    Xpath=.//h2[contains(text(),'Permission')]
+    Screenshot Entire Page
+    Close Browser
+    Log To Console    Able to open Permission Code Setting page
+
+TC02008_VerifySettingListOfValuePage
+    [Tags]    verifyAccessibility
+    AMS-Login
+    Go To    http://localhost:57065/listofvalue
+    Element Should Be Visible    Xpath=.//h2[contains(text(),'List Of Value')]
+    Screenshot Entire Page
+    Close Browser
+    Log To Console    Able to open List Of Value Setting page
+
+*** Keywords ***

@@ -1,0 +1,56 @@
+*** Settings ***
+Resource          resource.txt
+
+*** Variables ***
+@{CREDENTIAL}     KHilmi    P@ssw0rd
+${url}            http://localhost:57065/account/login
+
+*** Test Cases ***
+TC01001_Login_ValidUsernamePassword
+    [Tags]    loginTest
+    Open Browser    ${url}    chrome
+    Maximize Browser Window
+    DLY1
+    Input Text    id=UserName    @{CREDENTIAL}[0]
+    DLY1
+    Input Password    id=Password    @{CREDENTIAL}[1]
+    DLY1
+    Click Button    Xpath=.//*[@id='loginForm']/form/div[3]/div/input
+    Element Should Be Visible    Xpath=.//h2[contains(text(),'Dashboard')]
+    ${VERSION}    Get Text    Xpath=.//*[@id='App']/div[2]/aside/div[2]/span
+    Log    ${VERSION}
+    Log To Console    Login Success!
+    Screenshot Entire Page
+    Close Browser
+
+TC01002_Login_InvalidUsernamePassword
+    [Tags]    loginTest
+    Open Browser    ${url}    chrome
+    Maximize Browser Window
+    Input Text    id=UserName    kamarul
+    Input Password    id=Password    wrongpwd
+    Click Button    Xpath=.//*[@id='loginForm']/form/div[3]/div/input
+    Element Should Be Visible    Xpath=.//*[@id='loginForm']/form/div[1]/ul/li
+    Close Browser
+
+TC01003_Login_InvalidUsername
+    [Tags]    loginTest
+    Open Browser    ${url}    chrome
+    Maximize Browser Window
+    Input Text    id=UserName    kamarul
+    Input Password    id=Password    @{CREDENTIAL}[1]
+    Click Button    Xpath=.//*[@id='loginForm']/form/div[3]/div/input
+    Element Should Be Visible    Xpath=.//*[@id='loginForm']/form/div[1]/ul/li
+    Close Browser
+
+TC01004_Login_InvalidPassword
+    [Tags]    loginTest
+    Open Browser    ${url}    chrome
+    Maximize Browser Window
+    Input Text    id=UserName    @{CREDENTIAL}[0]
+    Input Password    id=Password    wrongpswd
+    Click Button    Xpath=.//*[@id='loginForm']/form/div[3]/div/input
+    Element Should Be Visible    Xpath=.//*[@id='loginForm']/form/div[1]/ul/li
+    Close Browser
+
+*** Keywords ***

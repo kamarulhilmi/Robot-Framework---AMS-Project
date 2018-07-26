@@ -1,0 +1,52 @@
+*** Settings ***
+Resource          resource.txt
+
+*** Variables ***
+${Port}           1435
+${Username}       sa
+${Password}       Kerry1234
+${DatabaseHost}    172.27.8.80
+@{QueryResult}
+${RowCount}       ${EMPTY}
+${DBName}         DB_AMS
+${QUERY_STATEMENT}    select Model_ID from Master_Asset where ID = 18474
+
+*** Test Cases ***
+ExistInDatabase
+    Connect To Database    pymssql    ${DBName}    ${Username}    ${Password}    ${DatabaseHost}    ${Port}
+    Check If Exists In Database    ${QUERY_STATEMENT}
+    Disconnect From Database
+
+ViewColumnDescription
+    Connect To Database    pymssql    ${DBName}    ${Username}    ${Password}    ${DatabaseHost}    ${Port}
+    @{QueryResult}    Description    select * from Master_Asset
+    Log Many    @{QueryResult}
+
+QueryToGetDataInCell
+    Connect To Database    pymssql    ${DBName}    ${Username}    ${Password}    ${DatabaseHost}    ${Port}
+    @{QueryResult}    Query    select Serial_Number from Master_Asset where ID = 18474
+    Log    @{QueryResult}
+    Log To Console    Serial_Number = @{QueryResult}
+
+DataRowCount
+    Connect To Database    pymssql    ${DBName}    ${Username}    ${Password}    ${DatabaseHost}    ${Port}
+    ${RowCount}    Row Count    select * from Master_Asset
+    Log    ${RowCount}
+    Log To Console    Row = ${RowCount}
+
+${EMPTY}
+
+VerifyData
+    Database Setup
+
+AssetRequest_CleanUp
+    Database Setup
+    Execute Sql String    delete from Asset_Approval where Approval_Request_ID in (select ID from Asset_Approval_Requests where Request_Asset in (select ID from Asset_Request where Requestor_ID = 22))
+    Execute Sql String    delete from Asset_Approval_Requests \ where Request_Asset in (select ID from Asset_Request \ where Requestor_ID = 22)
+    Execute Sql String    delete from Asset_Request_Items where Request_ID in (select ID from Asset_Request \ where Requestor_ID = 22)
+    Execute Sql String    delete from Asset_Request where Requestor_ID = 22
+    ${RowCount}    Row Count    select * from Asset_Request where Requestor_ID = 22
+    Log    ${RowCount}
+    Log To Console    Row = ${RowCount}
+
+*** Keywords ***

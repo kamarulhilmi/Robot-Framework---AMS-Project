@@ -1,0 +1,173 @@
+*** Settings ***
+Documentation     A resource file containing the application specific KEYWORD
+...               LIBRARY and VARIABLES specific for AMS_TestProject created
+...               by Kamarul Hilmi
+Library           SeleniumLibrary
+Library           String
+Library           AutoItLibrary
+Library           DatabaseLibrary
+Library           Screenshot
+
+*** Variables ***
+${Port}           1435
+${Username}       sa
+${Password}       Kerry1234
+${DatabaseHost}    172.27.8.80
+@{QueryResult}
+${RowCount}       ${EMPTY}
+${DBName}         DB_AMS
+${QUERY_STATEMENT}    select Asset_No from Master_Asset where Serial_Number = 'QA2005'
+@{CREDENTIAL}     KHilmi    P@ssw0rd
+${url}            http://localhost:57065/account/login
+&{ASSETINFO}      SerialNumber=ROBOTQA2005    Model=BrandQA - ModelQA02    RequestNumber=AR-1807-0017    DepartmentName=DeptQA    PIC=QA-Person    CurrentLocation=DCQA - dcqa    WarrantyStartDate=2018-08-01
+...               WarrantyDuration=90    Remark=Robot Framework    Status=In Stock
+&{ASSET_REQ}      DC=DCQA - dcqa    Justification=Cretaed by Robot Framework    AssetType=CPU    Model=BrandQA ModelQA    Quantity=1
+@{RowCountList}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${EMPTY}
+${VERSION}        ${EMPTY}
+
+*** Keywords ***
+AMS-Login
+    Open Browser    ${url}    chrome
+    Maximize Browser Window
+    DLY1
+    Input Text    id=UserName    @{CREDENTIAL}[0]
+    DLY1
+    Input Password    id=Password    @{CREDENTIAL}[1]
+    DLY2
+    Click Button    Xpath=.//*[@id='loginForm']/form/div[3]/div/input
+    DLY2
+    ${VERSION}    Get Text    Xpath=.//*[@id='App']/div[2]/aside/div[2]/span
+    Log    ${VERSION}
+    Log To Console    SUT Version - ${VERSION}
+    Log To Console    Login Success!
+
+Asset-Add Multiple Asset Button
+    Wait Until Element Is Not Visible    class=loading-image
+    Click Button    id=btnAddByLot
+
+Asset-Click ADD Button
+    Click Button    id=btnAdd
+
+Asset-Go To Asset Page
+    Click Element    Xpath=.//*[@id='SidebarNav']/a[2]
+    DLY1
+    Element Should Be Visible    Xpath=.//h2[contains(text(),'Asset')]
+    DLY3
+
+Asset-Upload Multiple Asset Button
+    Click Button    Xpath=.//*[@id='App']/div[4]/div/article/div/form/div[1]/div[2]/div/fieldset/div[1]/div/button
+    Wait Until Page Contains Element    id=FileUpload
+    Page Should Contain Element    id=FileUpload    \    \    limit=1
+    DLY3
+    Click Element    id=FileUpload
+    DLY3
+
+Asset-Add Asset Detail Form
+    Input Text    id=Serial_Number    &{ASSETINFO}[SerialNumber]    #Serial Number field
+    Click Element    id=select2-Model_ID-container    #.    #Model field
+    Input Text    class=select2-search__field    &{ASSETINFO}[Model]    #Model field
+    Press Key    class=select2-search__field    \\13    #Enter keyboard
+    Input Text    id=Request_Number    &{ASSETINFO}[RequestNumber]    #Request Number field
+    Click Element    id=select2-Department_ID-container    #.    #Department Name field
+    Input Text    class=select2-search__field    &{ASSETINFO}[DepartmentName]    #Department Name field
+    Press Key    class=select2-search__field    \\13    #Enter keyboard
+    Input Text    id=Person_In_Charge    &{ASSETINFO}[PIC]    #Person in charge field
+    Input Text    id=Current_Location_DC_Display_Text    &{ASSETINFO}[CurrentLocation]    #Current Location field
+    Double Click Element    id=btnSearchCurrent_Location    #.    #Current Location search button
+    Input Text    id=Warranty_Start_Date    &{ASSETINFO}[WarrantyStartDate]    #Warranty Start Date field
+    Input Text    id=Warranty_Duration    &{ASSETINFO}[WarrantyDuration]    #Warranty Duration field
+    Input Text    id=Remark    &{ASSETINFO}[Remark]    #Remark field
+    Click Element    id=select2-Status_ID-container    #.    #Status field
+    Input Text    class=select2-search__field    &{ASSETINFO}[Status]    #Status input
+    Press Key    class=select2-search__field    \\13    #Enter keyboard
+    DLY2
+    Wait Until Page Contains Element    Xpath=//span[contains(text(),'Save')]
+    Click Element    Xpath=//span[contains(text(),'Save')]
+    Capture Page Screenshot
+    Log To Console    Add New Asset Success!
+
+Asset-Verify New Asset UI
+    Asset-Go To Asset Page
+    Input Text    Xpath=.//*[@id='table_filter']/label/input    &{ASSETINFO}[SerialNumber]
+    DLY3
+    Screenshot Entire Page
+
+Asset-Verify New Asset DB
+    Database Setup
+    @{QueryResult}    Query    select Serial_Number from Master_Asset where Serial_Number = 'ROBOTQA2005'
+    Log    @{QueryResult}
+    Log To Console    Verified in Master_Asset Table - Serial_Number = @{QueryResult}
+
+Asset-Data Cleanup
+    Database Setup
+    Log To Console    Data Cleanup Start >>>
+    Execute Sql String    delete from Master_Asset_License_Key where Asset_ID in (select ID from Master_Asset \ where Serial_Number = 'ROBOTQA2005')
+    Execute Sql String    delete from Master_Asset \ where Serial_Number = 'ROBOTQA2005'
+    Log To Console    Verified data exist in Master_Asset table
+    ${RowCount}    Row Count    select * from Master_Asset where Serial_Number = 'ROBOTQA2005'
+    Log    ${RowCount}
+    Log To Console    Data row =${RowCount}
+    Log To Console    Data Cleanup Success!
+
+Request-Click ADD AssetRequest Button
+    Click Button    id=btnAdd
+    Element Should Be Visible    Xpath=//h2[contains(text(),'Add Asset Request')]
+    DLY2
+
+Request-AssetRequest Cleanup
+    Database Setup
+    Log To Console    Data Cleanup Start >>>
+    Execute Sql String    delete from Asset_Approval where Approval_Request_ID \ in (select ID from Asset_Approval_Requests \ where Request_Asset in (select ID from Asset_Request \ where Requestor_ID = 22))
+    Execute Sql String    delete from Asset_Approval_Requests \ where Request_Asset in (select ID from Asset_Request \ where Requestor_ID = 22)
+    Execute Sql String    delete from Asset_Request_Items where Request_ID in (select ID from Asset_Request \ where Requestor_ID = 22)
+    Execute Sql String    delete from Asset_Request where Requestor_ID = 22
+    Log To Console    Verified data exist Asset_Request table
+    ${RowCount}    Row Count    select * from Asset_Request where Requestor_ID = 22
+    Log    ${RowCount}
+    Log To Console    Data Row =${RowCount}
+    Log To Console    Data Cleanup Success!
+
+Request-Go To AssetRequest Page
+    Click Element    class=NavGroup
+    Go To    http://localhost:57065/assetrequest
+    Element Should Be Visible    Xpath=.//h2[contains(text(),'Asset Request')]
+    DLY2
+
+Request-Add AssetRequest Detail Form
+    Input Text    id=DC_Display_Text    &{ASSET_REQ}[DC]
+    Double Click Element    id=DC_Display_Text
+    Double Click Element    id=btnSearchDC
+    Input Text    id=Remark    &{ASSET_REQ}[Justification]
+    DLY1
+    Press Key    id=Asset_Request_Items_0__Asset_Type_ID    &{ASSET_REQ}[AssetType]
+    DLY1
+    Press Key    id=Asset_Request_Items[0].Asset_Model_ID    &{ASSET_REQ}[Model]
+    DLY1
+    Input Text    id=Asset_Request_Items_0__Quantity    &{ASSET_REQ}[Quantity]
+    DLY2
+    Click Button    id=btnAdd
+    DLY3
+    Log To Console    Add New Asset Request Success!
+
+Database Setup
+    Connect To Database    pymssql    ${DBName}    ${Username}    ${Password}    ${DatabaseHost}    ${Port}
+
+Screenshot Entire Page
+    Capture Page Screenshot
+    Log To Console    Screenshot capture Success!
+    DLY2
+
+DLY1
+    Sleep    1s
+
+DLY2
+    Sleep    2s
+
+DLY3
+    Sleep    3s
+
+Request-Verify New AssetRequest UI
+    Request-Go To AssetRequest Page
+    Input Text    Xpath=.//*[@id='tbRequestList_filter']/label/input    Robot Framework
+    DLY2
+    Screenshot Entire Page

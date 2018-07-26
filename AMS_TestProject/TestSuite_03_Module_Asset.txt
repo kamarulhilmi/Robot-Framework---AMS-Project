@@ -1,0 +1,24 @@
+*** Settings ***
+Resource          resource.txt
+
+*** Variables ***
+
+*** Test Cases ***
+TC03001_Asset_AddNewAsset
+    [Tags]    AddAsset
+    AMS-Login
+    Asset-Go To Asset Page
+    Asset-Click ADD Button
+    Asset-Add Asset Detail Form    #Test Data &{ASSETINFO}
+    Asset-Verify New Asset UI
+    Asset-Verify New Asset DB
+    Asset-Data Cleanup
+
+TC03002_Asset_AddMultipleAsset
+    [Tags]    AddMultipleAsset
+    AMS-Login
+    Asset-Go To Asset Page
+    Asset-Add Multiple Asset Button
+    Asset-Upload Multiple Asset Button
+
+*** Keywords ***

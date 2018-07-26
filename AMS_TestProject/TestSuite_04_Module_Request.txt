@@ -1,0 +1,12 @@
+*** Settings ***
+Resource          resource.txt
+
+*** Test Cases ***
+TC04001_AssetRequest_AddNew
+    [Tags]    addAssetReq
+    AMS-Login
+    Request-Go To AssetRequest Page
+    Request-Click ADD AssetRequest Button
+    Request-Add AssetRequest Detail Form
+    Request-Verify New AssetRequest UI
+    Request-AssetRequest Cleanup

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20180726 12:13:32.968" generator="Robot 3.0.4 (Python 2.7.15 on win32)">
+<suite source="C:\Robot\AMS_TestProject\TestSuite_01_LoginFunction.txt" id="s1" name="TestSuite 01 LoginFunction">
+<test id="s1-t1" name="TC01001_Login_ValidUsernamePassword">
+<kw name="Open Browser" library="SeleniumLibrary">
+<doc>Opens a new browser instance to the given ``url``.</doc>
+<arguments>
+<arg>${url}</arg>
+<arg>chrome</arg>
+</arguments>
+<msg timestamp="20180726 12:13:33.273" level="INFO">Opening browser 'chrome' to base url 'http://localhost:57065/account/login'.</msg>
+<status status="PASS" endtime="20180726 12:13:36.464" starttime="20180726 12:13:33.273"></status>
+</kw>
+<kw name="Maximize Browser Window" library="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" endtime="20180726 12:13:37.598" starttime="20180726 12:13:36.469"></status>
+</kw>
+<kw name="DLY1" library="resource">
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1s</arg>
+</arguments>
+<msg timestamp="20180726 12:13:38.601" level="INFO">Slept 1 second</msg>
+<status status="PASS" endtime="20180726 12:13:38.601" starttime="20180726 12:13:37.601"></status>
+</kw>
+<status status="PASS" endtime="20180726 12:13:38.601" starttime="20180726 12:13:37.599"></status>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<doc>Types the given ``text`` into text field identified by ``locator``.</doc>
+<arguments>
+<arg>id=UserName</arg>
+<arg>@{CREDENTIAL}[0]</arg>
+</arguments>
+<msg timestamp="20180726 12:13:38.602" level="INFO">Typing text 'KHilmi' into text field 'id=UserName'.</msg>
+<status status="PASS" endtime="20180726 12:13:38.693" starttime="20180726 12:13:38.602"></status>
+</kw>
+<kw name="DLY1" library="resource">
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1s</arg>
+</arguments>
+<msg timestamp="20180726 12:13:39.694" level="INFO">Slept 1 second</msg>
+<status status="PASS" endtime="20180726 12:13:39.694" starttime="20180726 12:13:38.694"></status>
+</kw>
+<status status="PASS" endtime="20180726 12:13:39.695" starttime="20180726 12:13:38.693"></status>
+</kw>
+<kw name="Input Password" library="SeleniumLibrary">
+<doc>Types the given password into text field identified by ``locator``.</doc>
+<arguments>
+<arg>id=Password</arg>
+<arg>@{CREDENTIAL}[1]</arg>
+</arguments>
+<msg timestamp="20180726 12:13:39.698" level="INFO">Typing password into text field 'id=Password'.</msg>
+<status status="PASS" endtime="20180726 12:13:39.844" starttime="20180726 12:13:39.697"></status>
+</kw>
+<kw name="DLY1" library="resource">
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1s</arg>
+</arguments>
+<msg timestamp="20180726 12:13:40.845" level="INFO">Slept 1 second</msg>
+<status status="PASS" endtime="20180726 12:13:40.845" starttime="20180726 12:13:39.845"></status>
+</kw>
+<status status="PASS" endtime="20180726 12:13:40.845" starttime="20180726 12:13:39.845"></status>
+</kw>
+<kw name="Click Button" library="SeleniumLibrary">
+<doc>Clicks button identified by ``locator``.</doc>
+<arguments>
+<arg>Xpath=.//*[@id='loginForm']/form/div[3]/div/input</arg>
+</arguments>
+<msg timestamp="20180726 12:13:40.846" level="INFO">Clicking button 'Xpath=.//*[@id='loginForm']/form/div[3]/div/input'.</msg>
+<status status="PASS" endtime="20180726 12:13:43.299" starttime="20180726 12:13:40.846"></status>
+</kw>
+<kw name="Element Should Be Visible" library="SeleniumLibrary">
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<arguments>
+<arg>Xpath=.//h2[contains(text(),'Dashboard')]</arg>
+</arguments>
+<msg timestamp="20180726 12:13:43.415" level="INFO">Element 'Xpath=.//h2[contains(text(),'Dashboard')]' is displayed.</msg>
+<status status="PASS" endtime="20180726 12:13:43.416" starttime="20180726 12:13:43.306"></status>
+</kw>
+<kw name="Get Text" library="SeleniumLibrary">
+<doc>Returns the text value of element identified by ``locator``.</doc>
+<arguments>
+<arg>Xpath=.//*[@id='App']/div[2]/aside/div[2]/span</arg>
+</arguments>
+<assign>
+<var>${VERSION}</var>
+</assign>
+<msg timestamp="20180726 12:13:43.651" level="INFO">${VERSION} = Version 1.0.0.54911</msg>
+<status status="PASS" endtime="20180726 12:13:43.651" starttime="20180726 12:13:43.431"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${VERSION}</arg>
+</arguments>
+<msg timestamp="20180726 12:13:43.652" level="INFO">Version 1.0.0.54911</msg>
+<status status="PASS" endtime="20180726 12:13:43.652" starttime="20180726 12:13:43.652"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Login Success!</arg>
+</arguments>
+<status status="PASS" endtime="20180726 12:13:43.653" starttime="20180726 12:13:43.652"></status>
+</kw>
+<kw name="Screenshot Entire Page" library="resource">
+<kw name="Capture Page Screenshot" library="SeleniumLibrary">
+<doc>Takes screenshot of the current page and embeds it into log file.</doc>
+<msg timestamp="20180726 12:13:44.140" html="yes" level="INFO">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<status status="PASS" endtime="20180726 12:13:44.140" starttime="20180726 12:13:43.654"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Screenshot capture Success!</arg>
+</arguments>
+<status status="PASS" endtime="20180726 12:13:44.141" starttime="20180726 12:13:44.140"></status>
+</kw>
+<kw name="DLY2" library="resource">
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>2s</arg>
+</arguments>
+<msg timestamp="20180726 12:13:46.142" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" endtime="20180726 12:13:46.142" starttime="20180726 12:13:44.141"></status>
+</kw>
+<status status="PASS" endtime="20180726 12:13:46.142" starttime="20180726 12:13:44.141"></status>
+</kw>
+<status status="PASS" endtime="20180726 12:13:46.142" starttime="20180726 12:13:43.653"></status>
+</kw>
+<kw name="Close Browser" library="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" endtime="20180726 12:13:48.326" starttime="20180726 12:13:46.143"></status>
+</kw>
+<tags>
+<tag>loginTest</tag>
+</tags>
+<status status="PASS" endtime="20180726 12:13:48.328" critical="yes" starttime="20180726 12:13:33.272"></status>
+</test>
+<status status="PASS" endtime="20180726 12:13:48.336" starttime="20180726 12:13:32.971"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
+</total>
+<tag>
+<stat fail="0" pass="1">loginTest</stat>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="TestSuite 01 LoginFunction" pass="1">TestSuite 01 LoginFunction</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
